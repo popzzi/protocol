@@ -390,16 +390,17 @@
       // Kakao SDK 공유 실행
       if (typeof Kakao !== 'undefined' && Kakao.isInitialized()) {
         Kakao.Share.sendDefault({
-          objectType: 'feed',
+          objectType: 'text',
           content: {
-            title: `[PPI Protocol 경과보고]`,
+            title: `[Protocol 경과보고]`,
             description: finalMsg,
             link: {
-              mobileWebUrl: window.location.href,
-              webUrl: window.location.href,
+              mobileWebUrl: "https://premiumpassintl.com/concierge",
+              webUrl: "https://premiumpassintl.com/concierge",
             },
           },
-          buttons: []
+          buttons: [],
+          buttonTitle: "홈페이지"
         });
       } else {
         alert("카카오 SDK 초기화에 실패했습니다.");
