@@ -12,123 +12,122 @@
     body { -webkit-tap-highlight-color: transparent; }
   </style>
 </head>
-<body class="bg-slate-100 text-slate-800 antialiased selection:bg-blue-200 min-h-screen pb-10">
+<body class="bg-slate-100 text-slate-800 antialiased selection:bg-blue-200 min-h-screen pb-12">
 
   <!-- Header -->
   <header class="bg-slate-900 text-white p-4 sticky top-0 z-50 shadow-md flex justify-between items-center">
-    <h1 class="text-lg font-bold tracking-tight">PPI Protocol</h1>
-    <button onclick="loadSchedules()" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-700 transition">
+    <h1 class="text-xl font-bold tracking-tight">PPI Protocol</h1>
+    <button onclick="loadSchedules()" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-2 rounded-lg border border-slate-700 transition font-medium">
       새로고침
     </button>
   </header>
 
   <main class="max-w-md mx-auto p-4 space-y-4">
     
-    <!-- 0. 보고 수신 대상 지정 (커스텀 드롭다운) -->
+    <!-- 0. 보고 수신 대상 선택 (타이틀 삭제, Default: 보고 대상 선택) -->
     <section class="bg-white p-3.5 rounded-2xl shadow-sm border border-slate-200 relative">
-      <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
-        보고 수신 대상 선택
-      </label>
-      
-      <!-- 커스텀 드롭다운 버튼 -->
-      <button id="targetGroupBtn" onclick="toggleTargetMenu()" class="w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-xl p-3 text-left font-semibold flex justify-between items-center">
-        <span id="targetGroupLabel">[의전 현장 1팀 단체방]</span>
+      <button id="targetGroupBtn" onclick="toggleTargetMenu()" class="w-full bg-slate-50 border border-slate-300 text-slate-900 text-base rounded-xl p-3.5 text-left font-semibold flex justify-between items-center">
+        <span id="targetGroupLabel">보고 대상 선택</span>
         <span class="text-xs text-slate-400">▼</span>
       </button>
 
       <!-- 커스텀 옵션 레이어 -->
       <div id="targetMenu" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-30 overflow-hidden divide-y divide-slate-100">
-        <div onclick="selectTargetGroup('TEAM1', '[의전 현장 1팀 단체방]')" class="p-3 text-sm hover:bg-slate-50 cursor-pointer font-medium">
+        <div onclick="selectTargetGroup('TEAM1', '[의전 현장 1팀 단체방]')" class="p-3.5 text-sm hover:bg-slate-50 cursor-pointer font-medium">
           [의전 현장 1팀 단체방]
         </div>
-        <div onclick="selectTargetGroup('TEAM2', '[의전 현장 2팀 단체방]')" class="p-3 text-sm hover:bg-slate-50 cursor-pointer font-medium">
+        <div onclick="selectTargetGroup('TEAM2', '[의전 현장 2팀 단체방]')" class="p-3.5 text-sm hover:bg-slate-50 cursor-pointer font-medium">
           [의전 현장 2팀 단체방]
         </div>
-        <div onclick="selectTargetGroup('MANAGER', '[총괄 매니저 직보고]')" class="p-3 text-sm hover:bg-slate-50 cursor-pointer font-medium">
+        <div onclick="selectTargetGroup('MANAGER', '[총괄 매니저 직보고]')" class="p-3.5 text-sm hover:bg-slate-50 cursor-pointer font-medium">
           [총괄 매니저 직보고]
         </div>
-        <div onclick="selectTargetGroup('CLIENT', '[클라이언트 / B2B 전용]')" class="p-3 text-sm hover:bg-slate-50 cursor-pointer font-medium">
+        <div onclick="selectTargetGroup('CLIENT', '[클라이언트 / B2B 전용]')" class="p-3.5 text-sm hover:bg-slate-50 cursor-pointer font-medium">
           [클라이언트 / B2B 전용]
         </div>
       </div>
     </section>
 
-    <!-- 1. 스케줄 선택 섹션 (커스텀 드롭다운) -->
+    <!-- 1. 담당 고객 선택 섹션 (상단 셀렉트박스 삭제, 파란색 카드가 스케줄 옵션 버튼 역할 수행) -->
     <section class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 relative">
-      <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
-        1. 담당 고객 선택
+      <label class="block text-sm font-bold text-slate-600 uppercase tracking-wider mb-2">
+        담당 고객 선택
       </label>
 
-      <!-- 커스텀 스케줄 선택 버튼 -->
-      <button id="scheduleBtn" onclick="toggleScheduleMenu()" class="w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-xl p-3 text-left font-medium flex justify-between items-center">
-        <span id="scheduleLabel">스케줄을 불러오는 중...</span>
-        <span class="text-xs text-slate-400">▼</span>
-      </button>
-
-      <!-- 커스텀 스케줄 옵션 레이어 -->
-      <div id="scheduleMenu" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-20 max-h-60 overflow-y-auto divide-y divide-slate-100">
-        <!-- JS로 동적 생성됨 -->
-      </div>
-      
-      <!-- 선택된 고객 요약 정보 -->
-      <div id="selectedInfoCard" class="mt-3 p-3 bg-blue-50 rounded-xl border border-blue-100 hidden">
-        <div class="flex justify-between items-center text-sm font-bold text-blue-900">
-          <span id="cardGuest">-</span>
-          <span id="cardFlight" class="bg-blue-200 px-2 py-0.5 rounded text-xs text-blue-800">-</span>
+      <!-- 선택 카드 (클릭 시 커스텀 목록이 열림) -->
+      <div id="selectedInfoCard" onclick="toggleScheduleMenu()" class="p-4 bg-blue-50 hover:bg-blue-100/80 transition rounded-xl border border-blue-200 cursor-pointer">
+        <div class="flex justify-between items-center text-base font-bold text-blue-950">
+          <span id="cardGuest">고객을 선택해 주세요</span>
+          <span id="cardFlight" class="bg-blue-200 px-2.5 py-1 rounded text-xs text-blue-800 font-semibold">선택</span>
         </div>
-        <div class="text-xs text-blue-700 mt-1.5 flex gap-3">
+        <div id="cardDetails" class="text-xs text-blue-800 mt-2 flex gap-3 hidden">
           <span>구분: <strong id="cardType">-</strong></span>
           <span>터미널: <strong id="cardTerminal">-</strong></span>
           <span>예정시각: <strong id="cardTime">-</strong></span>
         </div>
       </div>
-    </section>
 
-    <!-- 2. 상태 선택 섹션 -->
-    <section class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 space-y-2.5">
-      <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
-        2. 상태 선택
-      </label>
-
-      <div class="grid grid-cols-1 gap-2.5">
-        <button onclick="triggerReport('고객 접견 완료')" class="w-full py-3.5 px-4 bg-slate-800 hover:bg-slate-900 active:scale-[0.98] text-white font-bold rounded-xl shadow transition flex items-center justify-between">
-          <span>고객 접견 완료</span>
-          <span class="text-xs font-normal text-slate-400">전송</span>
-        </button>
-
-        <button onclick="triggerReport('CIQ 수속장 이동 중')" class="w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-bold rounded-xl shadow transition flex items-center justify-between">
-          <span>CIQ 수속장 이동 중</span>
-          <span class="text-xs font-normal text-blue-200">전송</span>
-        </button>
-
-        <button onclick="triggerReport('보안검색 및 출국심사 진행 중')" class="w-full py-3.5 px-4 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-bold rounded-xl shadow transition flex items-center justify-between">
-          <span>보안검색 / 심사 중</span>
-          <span class="text-xs font-normal text-indigo-200">전송</span>
-        </button>
-
-        <button onclick="triggerReport('라운지 / 게이트 이동 중')" class="w-full py-3.5 px-4 bg-purple-600 hover:bg-purple-700 active:scale-[0.98] text-white font-bold rounded-xl shadow transition flex items-center justify-between">
-          <span>라운지 / 게이트 이동</span>
-          <span class="text-xs font-normal text-purple-200">전송</span>
-        </button>
-
-        <button onclick="triggerReport('최종 인계 및 탑승 안내 완료')" class="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-bold rounded-xl shadow transition flex items-center justify-between">
-          <span>최종 인계 / 안내 완료</span>
-          <span class="text-xs font-normal text-emerald-200">전송</span>
-        </button>
+      <!-- 커스텀 스케줄 옵션 레이어 -->
+      <div id="scheduleMenu" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl z-20 max-h-64 overflow-y-auto divide-y divide-slate-100">
+        <!-- JS로 오늘 날짜 기준 정렬되어 동적 생성됨 -->
       </div>
     </section>
 
-    <!-- 3. 실시간 생성 문구 미리보기 (수정 가능 + 1.5배 높이) -->
+    <!-- 2. 실시간 생성 문구 미리보기 (위치 상단 이동 + 높이 유지) -->
     <section class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
       <div class="flex justify-between items-center mb-2">
-        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">
+        <label class="text-sm font-bold text-slate-600 uppercase tracking-wider">
           생성될 문구 미리보기
         </label>
-        <button onclick="copyToClipboardOnly()" class="text-xs text-blue-600 font-semibold hover:underline">
+        <button onclick="copyToClipboardOnly()" class="text-xs text-blue-600 font-semibold hover:underline bg-blue-50 px-2.5 py-1 rounded-lg">
           복사
         </button>
       </div>
-      <textarea id="previewText" rows="9" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono text-slate-700 outline-none focus:ring-1 focus:ring-blue-500 resize-none"></textarea>
+      <textarea id="previewText" rows="8" class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono text-slate-800 outline-none focus:ring-1 focus:ring-blue-500 resize-none" placeholder="고객 및 진행 상태를 선택하면 문구가 자동으로 작성됩니다."></textarea>
+    </section>
+
+    <!-- 3. 차량 정보 포함 여부 체크박스 -->
+    <section class="bg-white p-3.5 rounded-2xl shadow-sm border border-slate-200">
+      <label class="flex items-center space-x-3 cursor-pointer select-none">
+        <input type="checkbox" id="includeCarInfo" onchange="onCarInfoToggle()" class="w-5 h-5 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+        <span class="text-sm font-bold text-slate-700">차량 및 기사 배차 정보 포함</span>
+      </label>
+    </section>
+
+    <!-- 4. 상태 선택 섹션 (2열 구성, 버튼 높이 확보) -->
+    <section class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 space-y-3">
+      <label class="block text-sm font-bold text-slate-600 uppercase tracking-wider mb-1">
+        상태 선택
+      </label>
+
+      <div class="grid grid-cols-2 gap-2.5">
+        <button onclick="selectStatus('고객 접견 완료')" class="py-4 px-3 bg-slate-800 hover:bg-slate-900 active:scale-[0.98] text-white font-bold rounded-xl shadow transition text-sm">
+          고객 접견 완료
+        </button>
+
+        <button onclick="selectStatus('CIQ 수속장 이동 중')" class="py-4 px-3 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-bold rounded-xl shadow transition text-sm">
+          CIQ 수속장 이동 중
+        </button>
+
+        <button onclick="selectStatus('보안검색 / 심사 중')" class="py-4 px-3 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-bold rounded-xl shadow transition text-sm">
+          보안검색 / 심사 중
+        </button>
+
+        <button onclick="selectStatus('라운지 / 게이트 이동')" class="py-4 px-3 bg-purple-600 hover:bg-purple-700 active:scale-[0.98] text-white font-bold rounded-xl shadow transition text-sm">
+          라운지 / 게이트 이동
+        </button>
+
+        <button onclick="selectStatus('최종 인계 / 안내 완료')" class="col-span-2 py-4 px-3 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-bold rounded-xl shadow transition text-sm">
+          최종 인계 / 안내 완료
+        </button>
+      </div>
+    </section>
+
+    <!-- 5. 별도 최종 전송 버튼 -->
+    <section class="pt-2">
+      <button onclick="sendKakaoReport()" class="w-full py-4 bg-yellow-400 hover:bg-yellow-500 active:scale-[0.98] text-slate-900 font-extrabold text-base rounded-2xl shadow-md transition border border-yellow-300 flex justify-center items-center gap-2">
+        <span>카카오톡으로 전송하기</span>
+      </button>
     </section>
 
   </main>
@@ -139,13 +138,14 @@
   </div>
 
   <script>
+    // ⚙️ 기본 설정
     const KAKAO_JAVASCRIPT_KEY = '9d471ba172dbeb48ead35224a6d1b241'; 
     const GAS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbzy6oj6qjsXsjYd9aKDJp5SwsTm4k3wVO7VWxLzR958Pw-yuw8suDfbX_ssCPA-zHvL/exec'; 
 
     let scheduleDataList = [];
     let currentSelected = null;
-    let selectedTargetGroup = 'TEAM1';
-    let lastStatusText = "진행 상황을 선택해 주세요.";
+    let selectedTargetGroup = '';
+    let currentStatusText = '진행 상황을 선택해 주세요.';
 
     const dayNames = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -157,17 +157,17 @@
       }
       loadSchedules();
 
-      // 외부 클릭 시 커스텀 드롭다운 메뉴 닫기
+      // 외부 클릭 시 드롭다운 레이어 닫기
       document.addEventListener('click', function(e) {
         const targetBtn = document.getElementById('targetGroupBtn');
         const targetMenu = document.getElementById('targetMenu');
-        const schedBtn = document.getElementById('scheduleBtn');
+        const schedCard = document.getElementById('selectedInfoCard');
         const schedMenu = document.getElementById('scheduleMenu');
 
         if (targetBtn && targetMenu && !targetBtn.contains(e.target) && !targetMenu.contains(e.target)) {
           targetMenu.classList.add('hidden');
         }
-        if (schedBtn && schedMenu && !schedBtn.contains(e.target) && !schedMenu.contains(e.target)) {
+        if (schedCard && schedMenu && !schedCard.contains(e.target) && !schedMenu.contains(e.target)) {
           schedMenu.classList.add('hidden');
         }
       });
@@ -178,16 +178,12 @@
       return urlParams.get('key');
     }
 
-    /**
-     * MM.DD(요일) HH:mm 형태로 날짜/시간 포맷팅
-     */
     function formatDateTime(dateVal, timeVal) {
       if (!dateVal && !timeVal) return "시간미정";
 
       let formattedDate = "";
       let formattedTime = "";
 
-      // 1. 날짜 처리 (dateVal에서 월.일(요일) 추출)
       if (dateVal) {
         const d = new Date(dateVal);
         if (!isNaN(d.getTime())) {
@@ -200,7 +196,6 @@
         }
       }
 
-      // 2. 시간 처리 (timeVal에서 시:분 추출)
       if (timeVal) {
         const t = new Date(timeVal);
         if (!isNaN(t.getTime())) {
@@ -208,7 +203,6 @@
           const minutes = String(t.getMinutes()).padStart(2, '0');
           formattedTime = `${hours}:${minutes}`;
         } else if (typeof timeVal === 'string' && timeVal.includes(':')) {
-          // HH:mm 또는 HH:mm:ss 형태의 문자열일 경우
           const timeParts = timeVal.split(':');
           formattedTime = `${timeParts[0].padStart(2, '0')}:${timeParts[1].padStart(2, '0')}`;
         } else {
@@ -221,7 +215,7 @@
       return `${formattedDate} ${formattedTime}`.trim();
     }
 
-    /* 커스텀 타겟 그룹 메뉴 */
+    /* 수신 대상 선택 */
     function toggleTargetMenu() {
       document.getElementById('targetMenu').classList.toggle('hidden');
       document.getElementById('scheduleMenu').classList.add('hidden');
@@ -231,10 +225,10 @@
       selectedTargetGroup = value;
       document.getElementById('targetGroupLabel').textContent = labelText;
       document.getElementById('targetMenu').classList.add('hidden');
-      updatePreview(lastStatusText);
+      updatePreview();
     }
 
-    /* 커스텀 스케줄 메뉴 */
+    /* 담당 고객 커스텀 메뉴 토글 */
     function toggleScheduleMenu() {
       document.getElementById('scheduleMenu').classList.toggle('hidden');
       document.getElementById('targetMenu').classList.add('hidden');
@@ -246,35 +240,32 @@
       currentSelected = scheduleDataList[index];
       const dateTimeFormatted = formatDateTime(currentSelected.date, currentSelected.scheduleTime);
       
-      document.getElementById('scheduleLabel').textContent = `[${currentSelected.type}] ${currentSelected.guestName} (${currentSelected.flightNo}) | ${dateTimeFormatted}`;
       document.getElementById('scheduleMenu').classList.add('hidden');
 
-      // Card Update
-      document.getElementById('cardGuest').textContent = `${currentSelected.guestName}`;
+      // 선택된 정보 카드 업데이트
+      document.getElementById('cardGuest').textContent = `${currentSelected.guestName} 님`;
       document.getElementById('cardFlight').textContent = currentSelected.flightNo;
       document.getElementById('cardType').textContent = currentSelected.type;
       document.getElementById('cardTerminal').textContent = currentSelected.terminal;
       document.getElementById('cardTime').textContent = dateTimeFormatted;
-      document.getElementById('selectedInfoCard').classList.remove('hidden');
+      document.getElementById('cardDetails').classList.remove('hidden');
 
-      updatePreview("진행 상황을 선택해 주세요.");
+      updatePreview();
     }
 
     /**
-     * Apps Script 백엔드로 데이터 요청
+     * 구글 시트 백엔드 통신 및 오늘 날짜 기준 Sorting
      */
     function loadSchedules() {
       const apiKey = getApiKeyFromUrl();
 
       if (!apiKey) {
         alert("접속 URL에 인증 키(?key=...)가 포함되어 있지 않습니다.");
-        document.getElementById('scheduleLabel').textContent = "인증 키 없음 (URL을 확인해 주세요)";
+        document.getElementById('cardGuest').textContent = "인증 키 없음";
         return;
       }
 
-      document.getElementById('scheduleLabel').textContent = "시트에서 목록을 불러오는 중...";
-      
-      // 접속 URL에서 추출한 key 값을 백엔드로 전송
+      document.getElementById('cardGuest').textContent = "목록을 불러오는 중...";
       const requestUrl = `${GAS_WEBAPP_URL}?key=${encodeURIComponent(apiKey)}`;
 
       fetch(requestUrl)
@@ -283,42 +274,69 @@
           if (res.status === "success") {
             renderSchedules(res.data);
           } else {
-            alert("인증 오류: URL 파라미터의 시크릿 키가 일치하지 않습니다.");
-            document.getElementById('scheduleLabel').textContent = "로딩 실패 (인증 오류)";
+            alert("인증 오류: URL 파라미터 시크릿 키 불일치");
+            document.getElementById('cardGuest').textContent = "로딩 실패 (인증 오류)";
           }
         })
         .catch(err => {
           alert("네트워크 통신 에러: " + err);
-          document.getElementById('scheduleLabel').textContent = "로딩 실패 (새로고침해 주세요)";
+          document.getElementById('cardGuest').textContent = "로딩 실패 (새로고침 요망)";
         });
     }
 
-    function renderSchedules(data) { console.log(data);
+    function renderSchedules(data) {
+      if (!data || data.length === 0) {
+        document.getElementById('cardGuest').textContent = "스케줄 데이터 없음";
+        return;
+      }
+
+      // 오늘 날짜 기준 시간차 계산 및 정렬 (가장 가까운 오늘/미래 데이터 우선)
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
+
+      data.sort((a, b) => {
+        const dateA = a.date ? new Date(a.date) : new Date(0);
+        const dateB = b.date ? new Date(b.date) : new Date(0);
+        
+        const diffA = Math.abs(dateA - now);
+        const diffB = Math.abs(dateB - now);
+        
+        return diffA - diffB;
+      });
+
       scheduleDataList = data;
       const menu = document.getElementById('scheduleMenu');
       menu.innerHTML = '';
 
-      if (!data || data.length === 0) {
-        document.getElementById('scheduleLabel').textContent = "등록된 스케줄 데이터가 없습니다.";
-        document.getElementById('selectedInfoCard').classList.add('hidden');
-        return;
-      }
-
       data.forEach((item, index) => {
         const dateTimeFormatted = formatDateTime(item.date, item.scheduleTime);
         const itemDiv = document.createElement('div');
-        itemDiv.className = "p-3 text-xs hover:bg-slate-50 cursor-pointer font-medium text-slate-800";
+        itemDiv.className = "p-3.5 text-xs hover:bg-slate-50 cursor-pointer font-medium text-slate-800";
         itemDiv.textContent = `[${item.type}] ${item.guestName} (${item.flightNo}) | ${dateTimeFormatted}`;
         itemDiv.onclick = function() { selectSchedule(index); };
         menu.appendChild(itemDiv);
       });
 
-      // 첫 번째 항목 기본 선택
-      selectSchedule(0);
+      // 초기 상태: 직접 선택할 수 있도록 지정
+      document.getElementById('cardGuest').textContent = "고객을 선택해 주세요 (클릭)";
+      document.getElementById('cardFlight').textContent = "선택";
+      document.getElementById('cardDetails').classList.add('hidden');
+      currentSelected = null;
     }
 
-    function generateMessage(statusText) {
-      if (!currentSelected) return "고객을 먼저 선택해 주세요.";
+    /* 차량 정보 체크박스 변경 시 미리보기 업데이트 */
+    function onCarInfoToggle() {
+      updatePreview();
+    }
+
+    /* 상태 선택 시 미리보기만 업데이트 */
+    function selectStatus(statusText) {
+      currentStatusText = statusText;
+      updatePreview();
+    }
+
+    function generateMessage() {
+      if (!currentSelected) return "고객을 선택해 주세요.";
 
       const now = new Date();
       const hours = String(now.getHours()).padStart(2, '0');
@@ -351,34 +369,52 @@
       }
 
       const dateTimeFormatted = formatDateTime(currentSelected.date, currentSelected.scheduleTime);
+      const isCarInfoChecked = document.getElementById('includeCarInfo').checked;
+
+      let carDetailsText = "";
+      if (isCarInfoChecked) {
+        const driverName = currentSelected.driverName || "지정 중";
+        const driverPhone = currentSelected.driverPhone || "-";
+        const carNo = currentSelected.carNo || "-";
+        const carModel = currentSelected.carModel || "-";
+
+        carDetailsText = `\n• 배차/차량: ${carModel} (${carNo})\n` +
+                         `• 기사정보: ${driverName} (${driverPhone})`;
+      }
 
       return `${header}\n` +
              `• 고객명: ${currentSelected.guestName} (${currentSelected.flightNo})\n` +
              `• 구분/터미널: ${currentSelected.type} / ${currentSelected.terminal}\n` +
              `• 예정일시: ${dateTimeFormatted}\n` +
-             `• 현재상황: ${statusText}\n` +
-             `• 보고시각: ${currentTimeStr}\n\n` +
+             `• 현재상황: ${currentStatusText}\n` +
+             `• 보고시각: ${currentTimeStr}` +
+             `${carDetailsText}\n\n` +
              `${footer}`;
     }
 
-    function updatePreview(statusText) {
-      lastStatusText = statusText;
-      const msg = generateMessage(statusText);
+    function updatePreview() {
+      if (!currentSelected) {
+        document.getElementById('previewText').value = "고객을 먼저 선택해 주세요.";
+        return;
+      }
+      const msg = generateMessage();
       document.getElementById('previewText').value = msg;
     }
 
-    function triggerReport(statusText) {
+    /* 하단 별도 전송 버튼 클릭 시 카카오톡 전송 실행 */
+    function sendKakaoReport() {
       if (!currentSelected) {
         alert("고객을 먼저 선택해 주세요.");
         return;
       }
 
-      lastStatusText = statusText;
-      
-      const finalMsg = generateMessage(statusText);
-      document.getElementById('previewText').value = finalMsg;
+      let finalMsg = document.getElementById('previewText').value;
+      if (!finalMsg || finalMsg.includes("고객을 먼저 선택해 주세요")) {
+        finalMsg = generateMessage();
+        document.getElementById('previewText').value = finalMsg;
+      }
 
-      // 클립보드 복사
+      // 클립보드 복사 백업
       navigator.clipboard.writeText(finalMsg).catch(() => {});
 
       // 진동 피드백
@@ -390,9 +426,9 @@
           objectType: 'text',
           text: finalMsg,
           link: {
-              mobileWebUrl: "https://premiumpassintl.com/concierge",
-              webUrl: "https://premiumpassintl.com/concierge",
-            },
+            mobileWebUrl: "https://premiumpassintl.com/concierge",
+            webUrl: "https://premiumpassintl.com/concierge",
+          },
           buttonTitle: "홈페이지"
         });
       } else {
