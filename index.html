@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>APEX Protocol Status Reporter</title>
+  <title>PPI Protocol Status Reporter</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Kakao JavaScript SDK -->
@@ -16,98 +16,119 @@
 
   <!-- Header -->
   <header class="bg-slate-900 text-white p-4 sticky top-0 z-50 shadow-md flex justify-between items-center">
-    <h1 class="text-lg font-bold tracking-tight">✈️ APEX Protocol</h1>
+    <h1 class="text-lg font-bold tracking-tight">PPI Protocol</h1>
     <button onclick="loadSchedules()" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-700 transition">
-      🔄 새로고침
+      새로고침
     </button>
   </header>
 
   <main class="max-w-md mx-auto p-4 space-y-4">
     
-    <!-- 0. 보고 수신 대상 지정 -->
-    <section class="bg-white p-3.5 rounded-2xl shadow-sm border border-slate-200">
-      <div class="flex justify-between items-center mb-1.5">
-        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">
-          보고 수신 대상 선택
-        </label>
-        <span id="targetBadge" class="text-[10px] bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded-full">의전 1팀</span>
+    <!-- 0. 보고 수신 대상 지정 (커스텀 드롭다운) -->
+    <section class="bg-white p-3.5 rounded-2xl shadow-sm border border-slate-200 relative">
+      <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+        보고 수신 대상 선택
+      </label>
+      
+      <!-- 커스텀 드롭다운 버튼 -->
+      <button id="targetGroupBtn" onclick="toggleTargetMenu()" class="w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-xl p-3 text-left font-semibold flex justify-between items-center">
+        <span id="targetGroupLabel">[의전 현장 1팀 단체방]</span>
+        <span class="text-xs text-slate-400">▼</span>
+      </button>
+
+      <!-- 커스텀 옵션 레이어 -->
+      <div id="targetMenu" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-30 overflow-hidden divide-y divide-slate-100">
+        <div onclick="selectTargetGroup('TEAM1', '[의전 현장 1팀 단체방]')" class="p-3 text-sm hover:bg-slate-50 cursor-pointer font-medium">
+          [의전 현장 1팀 단체방]
+        </div>
+        <div onclick="selectTargetGroup('TEAM2', '[의전 현장 2팀 단체방]')" class="p-3 text-sm hover:bg-slate-50 cursor-pointer font-medium">
+          [의전 현장 2팀 단체방]
+        </div>
+        <div onclick="selectTargetGroup('MANAGER', '[총괄 매니저 직보고]')" class="p-3 text-sm hover:bg-slate-50 cursor-pointer font-medium">
+          [총괄 매니저 직보고]
+        </div>
+        <div onclick="selectTargetGroup('CLIENT', '[클라이언트 / B2B 전용]')" class="p-3 text-sm hover:bg-slate-50 cursor-pointer font-medium">
+          [클라이언트 / B2B 전용]
+        </div>
       </div>
-      <select id="targetGroupSelect" onchange="onTargetGroupChange()" class="w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-xl p-2.5 outline-none font-semibold">
-        <option value="TEAM1">[의전 현장 1팀 단체방]</option>
-        <option value="TEAM2">[의전 현장 2팀 단체방]</option>
-        <option value="MANAGER">[총괄 매니저 직보고]</option>
-        <option value="CLIENT">[클라이언트 / B2B 전용]</option>
-      </select>
     </section>
 
-    <!-- 1. 스케줄 선택 섹션 -->
-    <section class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
+    <!-- 1. 스케줄 선택 섹션 (커스텀 드롭다운) -->
+    <section class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 relative">
       <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
         1. 담당 고객 선택
       </label>
-      <select id="scheduleSelect" onchange="onScheduleChange()" class="w-full bg-slate-50 border border-slate-300 text-slate-900 text-base rounded-xl focus:ring-blue-500 focus:border-blue-500 p-3 outline-none font-medium">
-        <option value="">스케줄을 불러오는 중...</option>
-      </select>
+
+      <!-- 커스텀 스케줄 선택 버튼 -->
+      <button id="scheduleBtn" onclick="toggleScheduleMenu()" class="w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-xl p-3 text-left font-medium flex justify-between items-center">
+        <span id="scheduleLabel">스케줄을 불러오는 중...</span>
+        <span class="text-xs text-slate-400">▼</span>
+      </button>
+
+      <!-- 커스텀 스케줄 옵션 레이어 -->
+      <div id="scheduleMenu" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-20 max-h-60 overflow-y-auto divide-y divide-slate-100">
+        <!-- JS로 동적 생성됨 -->
+      </div>
       
       <!-- 선택된 고객 요약 정보 -->
       <div id="selectedInfoCard" class="mt-3 p-3 bg-blue-50 rounded-xl border border-blue-100 hidden">
         <div class="flex justify-between items-center text-sm font-bold text-blue-900">
-          <span id="cardGuest">홍길동 님</span>
-          <span id="cardFlight" class="bg-blue-200 px-2 py-0.5 rounded text-xs text-blue-800">KE902</span>
+          <span id="cardGuest">-</span>
+          <span id="cardFlight" class="bg-blue-200 px-2 py-0.5 rounded text-xs text-blue-800">-</span>
         </div>
-        <div class="text-xs text-blue-700 mt-1 flex gap-3">
-          <span>구분: <strong id="cardType">도착</strong></span>
-          <span>터미널: <strong id="cardTerminal">T2</strong></span>
-          <span>예정시간: <strong id="cardTime">14:30</strong></span>
+        <div class="text-xs text-blue-700 mt-1.5 flex gap-3">
+          <span>구분: <strong id="cardType">-</strong></span>
+          <span>터미널: <strong id="cardTerminal">-</strong></span>
+          <span>예정시각: <strong id="cardTime">-</strong></span>
         </div>
       </div>
     </section>
 
-    <!-- 2. 원터치 보고 버튼 섹션 -->
+    <!-- 2. 상태 선택 섹션 -->
     <section class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 space-y-2.5">
       <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
-        2. 상태 선택 (원터치 보고)
+        2. 상태 선택
       </label>
 
       <div class="grid grid-cols-1 gap-2.5">
         <button onclick="triggerReport('고객 접견 완료')" class="w-full py-3.5 px-4 bg-slate-800 hover:bg-slate-900 active:scale-[0.98] text-white font-bold rounded-xl shadow transition flex items-center justify-between">
           <span>고객 접견 완료</span>
-          <span class="text-xs font-normal text-slate-400">전송 ➔</span>
+          <span class="text-xs font-normal text-slate-400">전송</span>
         </button>
 
         <button onclick="triggerReport('CIQ 수속장 이동 중')" class="w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-bold rounded-xl shadow transition flex items-center justify-between">
           <span>CIQ 수속장 이동 중</span>
-          <span class="text-xs font-normal text-blue-200">전송 ➔</span>
+          <span class="text-xs font-normal text-blue-200">전송</span>
         </button>
 
         <button onclick="triggerReport('보안검색 및 출국심사 진행 중')" class="w-full py-3.5 px-4 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-bold rounded-xl shadow transition flex items-center justify-between">
           <span>보안검색 / 심사 중</span>
-          <span class="text-xs font-normal text-indigo-200">전송 ➔</span>
+          <span class="text-xs font-normal text-indigo-200">전송</span>
         </button>
 
         <button onclick="triggerReport('라운지 / 게이트 이동 중')" class="w-full py-3.5 px-4 bg-purple-600 hover:bg-purple-700 active:scale-[0.98] text-white font-bold rounded-xl shadow transition flex items-center justify-between">
           <span>라운지 / 게이트 이동</span>
-          <span class="text-xs font-normal text-purple-200">전송 ➔</span>
+          <span class="text-xs font-normal text-purple-200">전송</span>
         </button>
 
-        <button onclick="triggerReport('최종 인계 및 서비스 완료')" class="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-bold rounded-xl shadow transition flex items-center justify-between">
-          <span>최종 인계/서비스 완료</span>
-          <span class="text-xs font-normal text-emerald-200">전송 ➔</span>
+        <button onclick="triggerReport('최종 인계 및 탑승 안내 완료')" class="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-bold rounded-xl shadow transition flex items-center justify-between">
+          <span>최종 인계 / 안내 완료</span>
+          <span class="text-xs font-normal text-emerald-200">전송</span>
         </button>
       </div>
     </section>
 
-    <!-- 3. 실시간 생성 문구 미리보기 -->
+    <!-- 3. 실시간 생성 문구 미리보기 (수정 가능 + 1.5배 높이) -->
     <section class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
       <div class="flex justify-between items-center mb-2">
         <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">
           생성될 문구 미리보기
         </label>
         <button onclick="copyToClipboardOnly()" class="text-xs text-blue-600 font-semibold hover:underline">
-          텍스트만 복사
+          복사
         </button>
       </div>
-      <textarea id="previewText" rows="6" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono text-slate-700 outline-none resize-none" readonly></textarea>
+      <textarea id="previewText" rows="9" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono text-slate-700 outline-none focus:ring-1 focus:ring-blue-500 resize-none"></textarea>
     </section>
 
   </main>
@@ -118,33 +139,122 @@
   </div>
 
   <script>
-    // 1. 설정값 입력
-    const KAKAO_JAVASCRIPT_KEY = '9d471ba172dbeb48ead35224a6d1b241'; // 카카오 개발자 센터의 JavaScript 키
-    const GAS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbzy6oj6qjsXsjYd9aKDJp5SwsTm4k3wVO7VWxLzR958Pw-yuw8suDfbX_ssCPA-zHvL/exec'; // Apps Script 웹 앱 배포 URL (/exec로 끝나는 주소)
-    const API_SECRET_KEY = 'apex-protocol-secret-key-2026'; // Code.gs에 설정한 키와 동일하게 맞춤
+    const KAKAO_JAVASCRIPT_KEY = '9d471ba172dbeb48ead35224a6d1b241'; 
+    const GAS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbzy6oj6qjsXsjYd9aKDJp5SwsTm4k3wVO7VWxLzR958Pw-yuw8suDfbX_ssCPA-zHvL/exec'; 
 
     let scheduleDataList = [];
     let currentSelected = null;
+    let selectedTargetGroup = 'TEAM1';
     let lastStatusText = "진행 상황을 선택해 주세요.";
 
+    const dayNames = ["일", "월", "화", "수", "목", "금", "토"];
+
     window.onload = function() {
-      // 카카오 SDK 초기화
       if (KAKAO_JAVASCRIPT_KEY && typeof Kakao !== 'undefined') {
         if (!Kakao.isInitialized()) {
           Kakao.init(KAKAO_JAVASCRIPT_KEY);
         }
       }
       loadSchedules();
+
+      // 외부 클릭 시 커스텀 드롭다운 메뉴 닫기
+      document.addEventListener('click', function(e) {
+        const targetBtn = document.getElementById('targetGroupBtn');
+        const targetMenu = document.getElementById('targetMenu');
+        const schedBtn = document.getElementById('scheduleBtn');
+        const schedMenu = document.getElementById('scheduleMenu');
+
+        if (targetBtn && targetMenu && !targetBtn.contains(e.target) && !targetMenu.contains(e.target)) {
+          targetMenu.classList.add('hidden');
+        }
+        if (schedBtn && schedMenu && !schedBtn.contains(e.target) && !schedMenu.contains(e.target)) {
+          schedMenu.classList.add('hidden');
+        }
+      });
     };
 
+    function getApiKeyFromUrl() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('key');
+    }
+
     /**
-     * Apps Script 백엔드로 fetch API 연동
+     * MM.DD(요일) HH:mm 형태로 날짜/시간 포맷팅
+     */
+    function formatDateTime(dateStr, timeStr) {
+      if (!dateStr) return timeStr || "시간미정";
+
+      const parts = dateStr.split('-');
+      if (parts.length < 3) return `${dateStr} ${timeStr || ''}`.trim();
+
+      const year = parseInt(parts[0], 10);
+      const month = String(parseInt(parts[1], 10)).padStart(2, '0');
+      const day = String(parseInt(parts[2], 10)).padStart(2, '0');
+
+      const d = new Date(year, parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+      const dayOfWeek = dayNames[d.getDay()];
+
+      const formattedDate = `${month}.${day}(${dayOfWeek})`;
+      const formattedTime = timeStr || "시간미정";
+
+      return `${formattedDate} ${formattedTime}`;
+    }
+
+    /* 커스텀 타겟 그룹 메뉴 */
+    function toggleTargetMenu() {
+      document.getElementById('targetMenu').classList.toggle('hidden');
+      document.getElementById('scheduleMenu').classList.add('hidden');
+    }
+
+    function selectTargetGroup(value, labelText) {
+      selectedTargetGroup = value;
+      document.getElementById('targetGroupLabel').textContent = labelText;
+      document.getElementById('targetMenu').classList.add('hidden');
+      updatePreview(lastStatusText);
+    }
+
+    /* 커스텀 스케줄 메뉴 */
+    function toggleScheduleMenu() {
+      document.getElementById('scheduleMenu').classList.toggle('hidden');
+      document.getElementById('targetMenu').classList.add('hidden');
+    }
+
+    function selectSchedule(index) {
+      if (!scheduleDataList[index]) return;
+      
+      currentSelected = scheduleDataList[index];
+      const dateTimeFormatted = formatDateTime(currentSelected.date, currentSelected.scheduleTime);
+      
+      document.getElementById('scheduleLabel').textContent = `[${currentSelected.type}] ${currentSelected.guestName} (${currentSelected.flightNo}) | ${dateTimeFormatted}`;
+      document.getElementById('scheduleMenu').classList.add('hidden');
+
+      // Card Update
+      document.getElementById('cardGuest').textContent = `${currentSelected.guestName} 님`;
+      document.getElementById('cardFlight').textContent = currentSelected.flightNo;
+      document.getElementById('cardType').textContent = currentSelected.type;
+      document.getElementById('cardTerminal').textContent = currentSelected.terminal;
+      document.getElementById('cardTime').textContent = dateTimeFormatted;
+      document.getElementById('selectedInfoCard').classList.remove('hidden');
+
+      updatePreview("진행 상황을 선택해 주세요.");
+    }
+
+    /**
+     * Apps Script 백엔드로 데이터 요청
      */
     function loadSchedules() {
-      const select = document.getElementById('scheduleSelect');
-      select.innerHTML = '<option value="">⏳ 시트에서 목록을 불러오는 중...</option>';
+      const apiKey = getApiKeyFromUrl();
 
-      const requestUrl = `${GAS_WEBAPP_URL}?key=${API_SECRET_KEY}`;
+      if (!apiKey) {
+        alert("접속 URL에 인증 키(?key=...)가 포함되어 있지 않습니다.");
+        document.getElementById('scheduleLabel').textContent = "인증 키 없음 (URL을 확인해 주세요)";
+        return;
+      }
+
+      document.getElementById('scheduleLabel').textContent = "시트에서 목록을 불러오는 중...";
+      
+      // 접속 URL에서 추출한 key 값을 백엔드로 전송
+      const requestUrl = `${GAS_WEBAPP_URL}?key=${encodeURIComponent(apiKey)}`;
 
       fetch(requestUrl)
         .then(response => response.json())
@@ -152,79 +262,43 @@
           if (res.status === "success") {
             renderSchedules(res.data);
           } else {
-            alert("인증 오류 또는 데이터를 가져올 수 없습니다.");
-            select.innerHTML = '<option value="">❌ 로딩 실패 (권한 에러)</option>';
+            alert("인증 오류: URL 파라미터의 시크릿 키가 일치하지 않습니다.");
+            document.getElementById('scheduleLabel').textContent = "로딩 실패 (인증 오류)";
           }
         })
         .catch(err => {
           alert("네트워크 통신 에러: " + err);
-          select.innerHTML = '<option value="">❌ 로딩 실패 (새로고침해 주세요)</option>';
+          document.getElementById('scheduleLabel').textContent = "로딩 실패 (새로고침해 주세요)";
         });
     }
 
     function renderSchedules(data) {
       scheduleDataList = data;
-      const select = document.getElementById('scheduleSelect');
-      select.innerHTML = '';
+      const menu = document.getElementById('scheduleMenu');
+      menu.innerHTML = '';
 
       if (!data || data.length === 0) {
-        select.innerHTML = '<option value="">등록된 스케줄 데이터가 없습니다.</option>';
+        document.getElementById('scheduleLabel').textContent = "등록된 스케줄 데이터가 없습니다.";
         document.getElementById('selectedInfoCard').classList.add('hidden');
         return;
       }
 
       data.forEach((item, index) => {
-        const opt = document.createElement('option');
-        opt.value = index;
-        opt.textContent = `[${item.type}] ${item.guestName} (${item.flightNo}) | ${item.scheduleTime || '시간미정'}`;
-        select.appendChild(opt);
+        const dateTimeFormatted = formatDateTime(item.date, item.scheduleTime);
+        const itemDiv = document.createElement('div');
+        itemDiv.className = "p-3 text-xs hover:bg-slate-50 cursor-pointer font-medium text-slate-800";
+        itemDiv.textContent = `[${item.type}] ${item.guestName} (${item.flightNo}) | ${dateTimeFormatted}`;
+        itemDiv.onclick = function() { selectSchedule(index); };
+        menu.appendChild(itemDiv);
       });
 
-      select.selectedIndex = 0;
-      onScheduleChange();
-    }
-
-    function onTargetGroupChange() {
-      const select = document.getElementById('targetGroupSelect');
-      const badge = document.getElementById('targetBadge');
-      
-      const targetMap = {
-        'TEAM1': '의전 1팀',
-        'TEAM2': '의전 2팀',
-        'MANAGER': '총괄매니저',
-        'CLIENT': '클라이언트'
-      };
-      
-      badge.textContent = targetMap[select.value] || '선택됨';
-      updatePreview(lastStatusText);
-    }
-
-    function onScheduleChange() {
-      const select = document.getElementById('scheduleSelect');
-      const idx = select.value;
-      
-      if (idx === "" || !scheduleDataList[idx]) {
-        currentSelected = null;
-        document.getElementById('selectedInfoCard').classList.add('hidden');
-        return;
-      }
-
-      currentSelected = scheduleDataList[idx];
-      
-      document.getElementById('cardGuest').textContent = currentSelected.guestName;
-      document.getElementById('cardFlight').textContent = currentSelected.flightNo;
-      document.getElementById('cardType').textContent = currentSelected.type;
-      document.getElementById('cardTerminal').textContent = currentSelected.terminal;
-      document.getElementById('cardTime').textContent = currentSelected.scheduleTime || '-';
-      document.getElementById('selectedInfoCard').classList.remove('hidden');
-
-      updatePreview("진행 상황을 선택해 주세요.");
+      // 첫 번째 항목 기본 선택
+      selectSchedule(0);
     }
 
     function generateMessage(statusText) {
       if (!currentSelected) return "고객을 먼저 선택해 주세요.";
 
-      const targetType = document.getElementById('targetGroupSelect').value;
       const now = new Date();
       const hours = String(now.getHours()).padStart(2, '0');
       const minutes = String(now.getMinutes()).padStart(2, '0');
@@ -233,21 +307,21 @@
       let header = "";
       let footer = "";
 
-      switch(targetType) {
+      switch(selectedTargetGroup) {
         case 'TEAM1':
-          header = `[📢 의전 1팀 현장 공유]`;
+          header = `[의전 1팀 현장 공유]`;
           footer = `팀원분들 참고 부탁드립니다.`;
           break;
         case 'TEAM2':
-          header = `[📢 의전 2팀 현장 공유]`;
+          header = `[의전 2팀 현장 공유]`;
           footer = `2팀 현장 동선 확인 부탁드립니다.`;
           break;
         case 'MANAGER':
-          header = `[👤 총괄 매니저 보고]`;
+          header = `[총괄 매니저 보고]`;
           footer = `특이사항 없이 계획대로 진행 중입니다.`;
           break;
         case 'CLIENT':
-          header = `[🏢 VIP 의전 진행 경과보고]`;
+          header = `[VIP 의전 진행 경과보고]`;
           footer = `최상의 서비스로 정성껏 모시겠습니다.`;
           break;
         default:
@@ -255,9 +329,12 @@
           footer = `차질 없이 진행 중입니다.`;
       }
 
+      const dateTimeFormatted = formatDateTime(currentSelected.date, currentSelected.scheduleTime);
+
       return `${header}\n` +
              `• 고객명: ${currentSelected.guestName} (${currentSelected.flightNo})\n` +
              `• 구분/터미널: ${currentSelected.type} / ${currentSelected.terminal}\n` +
+             `• 예정일시: ${dateTimeFormatted}\n` +
              `• 현재상황: ${statusText}\n` +
              `• 보고시각: ${currentTimeStr}\n\n` +
              `${footer}`;
@@ -276,29 +353,35 @@
       }
 
       lastStatusText = statusText;
-      const finalMsg = generateMessage(statusText);
-      document.getElementById('previewText').value = finalMsg;
+      
+      let finalMsg = document.getElementById('previewText').value;
+      if (!finalMsg || finalMsg.includes("고객을 먼저 선택해 주세요")) {
+        finalMsg = generateMessage(statusText);
+        document.getElementById('previewText').value = finalMsg;
+      }
 
-      // 1. 클립보드 자동 복사
+      // 클립보드 복사
       navigator.clipboard.writeText(finalMsg).catch(() => {});
 
-      // 2. 진동 피드백
+      // 진동 피드백
       if (navigator.vibrate) navigator.vibrate(50);
 
-      // 3. Kakao SDK 공유 실행 (GitHub Pages 도메인이므로 오류 없이 구동)
+      // Kakao SDK 공유 실행
       if (typeof Kakao !== 'undefined' && Kakao.isInitialized()) {
         Kakao.Share.sendDefault({
           objectType: 'feed',
-          text: finalMsg,
+          content: {
+            title: `[PPI Protocol 경과보고]`,
+            description: finalMsg,
+            link: {
+              mobileWebUrl: window.location.href,
+              webUrl: window.location.href,
+            },
+          },
           buttons: []
-          // link: {
-          //   mobileWebUrl: 'https://developers.kakao.com',
-          //   webUrl: 'https://developers.kakao.com',
-          // },
-          // buttonTitle: ''
         });
       } else {
-        alert("카카오 SDK 초기화에 실패했습니다. 키 설정을 확인해 주세요.");
+        alert("카카오 SDK 초기화에 실패했습니다.");
       }
     }
 
