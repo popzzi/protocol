@@ -375,11 +375,8 @@
 
       lastStatusText = statusText;
       
-      let finalMsg = document.getElementById('previewText').value;
-      if (!finalMsg || finalMsg.includes("고객을 먼저 선택해 주세요")) {
-        finalMsg = generateMessage(statusText);
-        document.getElementById('previewText').value = finalMsg;
-      }
+      const finalMsg = generateMessage(statusText);
+      document.getElementById('previewText').value = finalMsg;
 
       // 클립보드 복사
       navigator.clipboard.writeText(finalMsg).catch(() => {});
