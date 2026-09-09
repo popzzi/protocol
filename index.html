@@ -181,23 +181,44 @@
     /**
      * MM.DD(요일) HH:mm 형태로 날짜/시간 포맷팅
      */
-    function formatDateTime(dateStr, timeStr) {
-      if (!dateStr) return timeStr || "시간미정";
+    function formatDateTime(dateVal, timeVal) {
+      if (!dateVal && !timeVal) return "시간미정";
 
-      const parts = dateStr.split('-');
-      if (parts.length < 3) return `${dateStr} ${timeStr || ''}`.trim();
+      let formattedDate = "";
+      let formattedTime = "";
 
-      const year = parseInt(parts[0], 10);
-      const month = String(parseInt(parts[1], 10)).padStart(2, '0');
-      const day = String(parseInt(parts[2], 10)).padStart(2, '0');
+      // 1. 날짜 처리 (dateVal에서 월.일(요일) 추출)
+      if (dateVal) {
+        const d = new Date(dateVal);
+        if (!isNaN(d.getTime())) {
+          const month = String(d.getMonth() + 1).padStart(2, '0');
+          const day = String(d.getDate()).padStart(2, '0');
+          const dayOfWeek = dayNames[d.getDay()];
+          formattedDate = `${month}.${day}(${dayOfWeek})`;
+        } else {
+          formattedDate = String(dateVal);
+        }
+      }
 
-      const d = new Date(year, parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
-      const dayOfWeek = dayNames[d.getDay()];
+      // 2. 시간 처리 (timeVal에서 시:분 추출)
+      if (timeVal) {
+        const t = new Date(timeVal);
+        if (!isNaN(t.getTime())) {
+          const hours = String(t.getHours()).padStart(2, '0');
+          const minutes = String(t.getMinutes()).padStart(2, '0');
+          formattedTime = `${hours}:${minutes}`;
+        } else if (typeof timeVal === 'string' && timeVal.includes(':')) {
+          // HH:mm 또는 HH:mm:ss 형태의 문자열일 경우
+          const timeParts = timeVal.split(':');
+          formattedTime = `${timeParts[0].padStart(2, '0')}:${timeParts[1].padStart(2, '0')}`;
+        } else {
+          formattedTime = String(timeVal);
+        }
+      } else {
+        formattedTime = "시간미정";
+      }
 
-      const formattedDate = `${month}.${day}(${dayOfWeek})`;
-      const formattedTime = timeStr || "시간미정";
-
-      return `${formattedDate} ${formattedTime}`;
+      return `${formattedDate} ${formattedTime}`.trim();
     }
 
     /* 커스텀 타겟 그룹 메뉴 */
