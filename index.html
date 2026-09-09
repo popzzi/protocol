@@ -199,22 +199,26 @@
       }
 
       if (timeVal) {
-        const t = new Date(timeVal);
-        if (!isNaN(t.getTime())) {
-          const hours = String(t.getHours()).padStart(2, '0');
-          const minutes = String(t.getMinutes()).padStart(2, '0');
-          formattedTime = `${hours}:${minutes}`;
-        } else if (typeof timeVal === 'string' && timeVal.includes(':')) {
-          const timeParts = timeVal.split(':');
-          formattedTime = `${timeParts[0].padStart(2, '0')}:${timeParts[1].padStart(2, '0')}`;
-        } else {
-          formattedTime = String(timeVal);
-        }
+        formattedTime = convertTime(timeVal);
       } else {
         formattedTime = "시간미정";
       }
 
       return `${formattedDate} ${formattedTime}`.trim();
+    }
+
+    function convertTime(timeVal) {
+      const t = new Date(timeVal);
+      if (!isNaN(t.getTime())) {
+        const hours = String(t.getHours()).padStart(2, '0');
+        const minutes = String(t.getMinutes()).padStart(2, '0');
+        return `${hours}:${minutes}`;
+      } else if (typeof timeVal === 'string' && timeVal.includes(':')) {
+        const timeParts = timeVal.split(':');
+        return `${timeParts[0].padStart(2, '0')}:${timeParts[1].padStart(2, '0')}`;
+      } else {
+        return String(timeVal);
+      }
     }
 
     /* 수신 대상 선택 */
@@ -415,7 +419,7 @@
         const driverPhone = currentSelected.driverPhone || "-";
         const carNo = currentSelected.carNo || "-";
         const carModel = currentSelected.carModel || "-";
-        const eta = currentSelected.eta || "-";
+        const eta = convertTime(currentSelected.eta) || "-";
 
         carDetailsText = `\n\n[차량 정보]\n• 배차/차량: ${carModel} (${carNo})\n` +
                          `• 기사정보: ${driverName} (${driverPhone})\n` + `• 도착 예정 시간: ${eta}`;
