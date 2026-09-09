@@ -291,9 +291,10 @@
           objectType: 'text',
           text: finalMsg,
           link: {
-            mobileWebUrl: window.location.href,
-            webUrl: window.location.href,
+            mobileWebUrl: 'https://developers.kakao.com',
+            webUrl: 'https://developers.kakao.com',
           },
+          buttonTitle: ''
         });
       } else {
         alert("카카오 SDK 초기화에 실패했습니다. 키 설정을 확인해 주세요.");
@@ -304,7 +305,7 @@
       const text = document.getElementById('previewText').value;
       if (!text) return;
       navigator.clipboard.writeText(text).then(() => {
-        showToast("📋 미리보기 문구가 복사되었습니다.");
+        showToast("미리보기 문구가 복사되었습니다.");
       });
     }
 
