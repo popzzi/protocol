@@ -415,9 +415,10 @@
         const driverPhone = currentSelected.driverPhone || "-";
         const carNo = currentSelected.carNo || "-";
         const carModel = currentSelected.carModel || "-";
+        const eta = currentSelected.eta || "-";
 
-        carDetailsText = `\n\n\n• 배차/차량: ${carModel} (${carNo})\n` +
-                         `• 기사정보: ${driverName} (${driverPhone})`;
+        carDetailsText = `\n\n[차량 정보]\n• 배차/차량: ${carModel} (${carNo})\n` +
+                         `• 기사정보: ${driverName} (${driverPhone})\n` + `• 도착 예정 시간: ${eta}`;
       }
 
       return `${header}\n` +
