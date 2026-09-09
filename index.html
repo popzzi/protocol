@@ -391,14 +391,11 @@
       if (typeof Kakao !== 'undefined' && Kakao.isInitialized()) {
         Kakao.Share.sendDefault({
           objectType: 'text',
-          content: {
-            title: `[Protocol 경과보고]`,
-            description: finalMsg,
-            link: {
+          text: finalMsg,
+          link: {
               mobileWebUrl: "https://premiumpassintl.com/concierge",
               webUrl: "https://premiumpassintl.com/concierge",
             },
-          },
           buttonTitle: "홈페이지"
         });
       } else {
