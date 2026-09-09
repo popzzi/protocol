@@ -66,8 +66,8 @@
           </div>
           <div id="cardDetails" class="text-xs text-blue-800 mt-2 flex gap-3 hidden">
             <span>구분: <strong id="cardType">-</strong></span>
-            <span>터미널: <strong id="cardTerminal">-</strong></span>
-            <span>예정시각: <strong id="cardTime">-</strong></span>
+            <span>스케줄: <strong id="cardTerminal">-</strong> / <strong id="cardTime">-</strong></span>
+            <!-- <span></span> -->
           </div>
         </div>
   
@@ -104,23 +104,23 @@
 
       <div class="grid grid-cols-2 gap-2.5">
         <button onclick="selectStatus('고객 접견 완료')" class="py-4 px-3 bg-slate-800 hover:bg-slate-900 active:scale-[0.98] text-white font-bold rounded-xl shadow transition text-sm">
-          고객 접견 완료
+          접견 완료
         </button>
 
         <button onclick="selectStatus('CIQ 수속장 이동 중')" class="py-4 px-3 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-bold rounded-xl shadow transition text-sm">
-          CIQ 수속장 이동 중
+          CIQ 이동 중
         </button>
 
         <button onclick="selectStatus('보안검색 / 심사 중')" class="py-4 px-3 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-bold rounded-xl shadow transition text-sm">
-          보안검색 / 심사 중
+          보안검색 중
         </button>
 
         <button onclick="selectStatus('라운지 / 게이트 이동')" class="py-4 px-3 bg-purple-600 hover:bg-purple-700 active:scale-[0.98] text-white font-bold rounded-xl shadow transition text-sm">
-          라운지 / 게이트 이동
+          라운지/게이트 이동
         </button>
 
         <button onclick="selectStatus('최종 인계 / 안내 완료')" class="col-span-2 py-4 px-3 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-bold rounded-xl shadow transition text-sm">
-          최종 인계 / 안내 완료
+          서비스 완료
         </button>
       </div>
     </section>
