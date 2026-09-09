@@ -18,7 +18,7 @@
   <!-- Header -->
   <header class="bg-slate-900 text-white p-4 sticky top-0 z-50 shadow-md flex justify-between items-center">
     <h1 class="text-xl font-bold tracking-tight">PPI Protocol</h1>
-    <button onclick="loadSchedules()" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-2 rounded-lg border border-slate-700 transition font-medium">
+    <button onclick="loadSchedules(); initPreview();" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-2 rounded-lg border border-slate-700 transition font-medium">
       새로고침
     </button>
   </header>
@@ -140,7 +140,7 @@
   </div>
 
   <script>
-    // ⚙️ 기본 설정
+    //기본 설정
     const KAKAO_JAVASCRIPT_KEY = '9d471ba172dbeb48ead35224a6d1b241'; 
     const GAS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbzy6oj6qjsXsjYd9aKDJp5SwsTm4k3wVO7VWxLzR958Pw-yuw8suDfbX_ssCPA-zHvL/exec'; 
 
@@ -178,6 +178,10 @@
     function getApiKeyFromUrl() {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get('key');
+    }
+
+    function initPreview() {
+      document.getElementById('previewText').value = '';
     }
 
     function formatDateTime(dateVal, timeVal) {
