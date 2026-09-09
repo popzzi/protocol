@@ -27,24 +27,26 @@
     
     <!-- 0. 보고 수신 대상 선택 (타이틀 삭제, Default: 보고 대상 선택) -->
     <section>
-      <button id="targetGroupBtn" onclick="toggleTargetMenu()" class="w-full bg-slate-50 border border-slate-300 text-slate-900 text-base rounded-xl p-3.5 text-left font-semibold flex justify-between items-center">
-        <span id="targetGroupLabel">보고 대상 선택</span>
-        <span class="text-xs text-slate-400">▼</span>
-      </button>
-
-      <!-- 커스텀 옵션 레이어 -->
-      <div id="targetMenu" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-30 overflow-hidden divide-y divide-slate-100">
-        <div onclick="selectTargetGroup('TEAM1', '[의전 현장 1팀 단체방]')" class="p-3.5 text-sm hover:bg-slate-50 cursor-pointer font-medium">
-          [의전 현장 1팀 단체방]
-        </div>
-        <div onclick="selectTargetGroup('TEAM2', '[의전 현장 2팀 단체방]')" class="p-3.5 text-sm hover:bg-slate-50 cursor-pointer font-medium">
-          [의전 현장 2팀 단체방]
-        </div>
-        <div onclick="selectTargetGroup('MANAGER', '[총괄 매니저 직보고]')" class="p-3.5 text-sm hover:bg-slate-50 cursor-pointer font-medium">
-          [총괄 매니저 직보고]
-        </div>
-        <div onclick="selectTargetGroup('CLIENT', '[클라이언트 / B2B 전용]')" class="p-3.5 text-sm hover:bg-slate-50 cursor-pointer font-medium">
-          [클라이언트 / B2B 전용]
+      <div class="relative">
+        <button id="targetGroupBtn" onclick="toggleTargetMenu()" class="w-full bg-slate-50 border border-slate-300 text-slate-900 text-base rounded-xl p-3.5 text-left font-semibold flex justify-between items-center">
+          <span id="targetGroupLabel">보고 대상 선택</span>
+          <span class="text-xs text-slate-400">▼</span>
+        </button>
+  
+        <!-- 커스텀 옵션 레이어 -->
+        <div id="targetMenu" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-30 overflow-hidden divide-y divide-slate-100">
+          <div onclick="selectTargetGroup('TEAM1', '[의전 현장 1팀 단체방]')" class="p-3.5 text-sm hover:bg-slate-50 cursor-pointer font-medium">
+            [의전 현장 1팀 단체방]
+          </div>
+          <div onclick="selectTargetGroup('TEAM2', '[의전 현장 2팀 단체방]')" class="p-3.5 text-sm hover:bg-slate-50 cursor-pointer font-medium">
+            [의전 현장 2팀 단체방]
+          </div>
+          <div onclick="selectTargetGroup('MANAGER', '[총괄 매니저 직보고]')" class="p-3.5 text-sm hover:bg-slate-50 cursor-pointer font-medium">
+            [총괄 매니저 직보고]
+          </div>
+          <div onclick="selectTargetGroup('CLIENT', '[클라이언트 / B2B 전용]')" class="p-3.5 text-sm hover:bg-slate-50 cursor-pointer font-medium">
+            [클라이언트 / B2B 전용]
+          </div>
         </div>
       </div>
     </section>
@@ -56,21 +58,23 @@
       </label>
 
       <!-- 선택 카드 (클릭 시 커스텀 목록이 열림) -->
-      <div id="selectedInfoCard" onclick="toggleScheduleMenu()" class="p-4 bg-blue-50 hover:bg-blue-100/80 transition rounded-xl border border-blue-200 cursor-pointer">
-        <div class="flex justify-between items-center text-base font-bold text-blue-950">
-          <span id="cardGuest">고객을 선택해 주세요</span>
-          <span id="cardFlight" class="bg-blue-200 px-2.5 py-1 rounded text-xs text-blue-800 font-semibold">선택</span>
+      <div class="relative">
+        <div id="selectedInfoCard" onclick="toggleScheduleMenu()" class="p-4 bg-blue-50 hover:bg-blue-100/80 transition rounded-xl border border-blue-200 cursor-pointer">
+          <div class="flex justify-between items-center text-base font-bold text-blue-950">
+            <span id="cardGuest">고객을 선택해 주세요</span>
+            <span id="cardFlight" class="bg-blue-200 px-2.5 py-1 rounded text-xs text-blue-800 font-semibold">선택</span>
+          </div>
+          <div id="cardDetails" class="text-xs text-blue-800 mt-2 flex gap-3 hidden">
+            <span>구분: <strong id="cardType">-</strong></span>
+            <span>터미널: <strong id="cardTerminal">-</strong></span>
+            <span>예정시각: <strong id="cardTime">-</strong></span>
+          </div>
         </div>
-        <div id="cardDetails" class="text-xs text-blue-800 mt-2 flex gap-3 hidden">
-          <span>구분: <strong id="cardType">-</strong></span>
-          <span>터미널: <strong id="cardTerminal">-</strong></span>
-          <span>예정시각: <strong id="cardTime">-</strong></span>
+  
+        <!-- 커스텀 스케줄 옵션 레이어 -->
+        <div id="scheduleMenu" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl z-20 max-h-64 overflow-y-auto divide-y divide-slate-100">
+          <!-- JS로 오늘 날짜 기준 정렬되어 동적 생성됨 -->
         </div>
-      </div>
-
-      <!-- 커스텀 스케줄 옵션 레이어 -->
-      <div id="scheduleMenu" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl z-20 max-h-64 overflow-y-auto divide-y divide-slate-100">
-        <!-- JS로 오늘 날짜 기준 정렬되어 동적 생성됨 -->
       </div>
     </section>
 
