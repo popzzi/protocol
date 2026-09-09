@@ -292,25 +292,59 @@
         return;
       }
 
-      // 오늘 날짜 기준 시간차 계산 및 정렬 (가장 가까운 오늘/미래 데이터 우선)
+      // 1. 오늘 날짜(YYYY-MM-DD) 구하기 (한국 시간 기준)
       const now = new Date();
-      now.setHours(0, 0, 0, 0);
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      const todayStr = `${year}-${month}-${day}`;
 
-      data.sort((a, b) => {
-        const dateA = a.date ? new Date(a.date) : new Date(0);
-        const dateB = b.date ? new Date(b.date) : new Date(0);
+      // 2. 오늘 날짜에 해당하는 스케줄만 필터링 (item.date 가 'YYYY-MM-DD' 문자열이거나 Date 객체인 경우 처리)
+      const todayData = data.filter(item => {
+        if (!item.date) return false;
         
-        const diffA = Math.abs(dateA - now);
-        const diffB = Math.abs(dateB - now);
-        
-        return diffA - diffB;
+        let itemDateStr = "";
+        if (typeof item.date === 'string') {
+          // '2026-09-09' 또는 'Wed Sep 09 2026...' 포맷 처리
+          if (item.date.includes('-')) {
+            itemDateStr = item.date.substring(0, 10);
+          } else {
+            const d = new Date(item.date);
+            if (!isNaN(d.getTime())) {
+              const m = String(d.getMonth() + 1).padStart(2, '0');
+              const dy = String(d.getDate()).padStart(2, '0');
+              itemDateStr = `${d.getFullYear()}-${m}-${dy}`;
+            }
+          }
+        } else if (item.date instanceof Date) {
+          const m = String(item.date.getMonth() + 1).padStart(2, '0');
+          const dy = String(item.date.getDate()).padStart(2, '0');
+          itemDateStr = `${item.date.getFullYear()}-${m}-${dy}`;
+        }
+
+        return itemDateStr === todayStr;
       });
 
-      scheduleDataList = data;
+      if (todayData.length === 0) {
+        document.getElementById('cardGuest').textContent = "오늘 예정된 스케줄이 없습니다";
+        document.getElementById('cardFlight').textContent = "없음";
+        document.getElementById('scheduleMenu').innerHTML = '<div class="p-3.5 text-xs text-slate-400">오늘 스케줄이 없습니다.</div>';
+        currentSelected = null;
+        return;
+      }
+
+      // 3. 오늘 스케줄 중 시간순 정렬
+      todayData.sort((a, b) => {
+        const timeA = a.scheduleTime || '99:99';
+        const timeB = b.scheduleTime || '99:99';
+        return timeA.localeCompare(timeB);
+      });
+
+      scheduleDataList = todayData;
       const menu = document.getElementById('scheduleMenu');
       menu.innerHTML = '';
 
-      data.forEach((item, index) => {
+      todayData.forEach((item, index) => {
         const dateTimeFormatted = formatDateTime(item.date, item.scheduleTime);
         const itemDiv = document.createElement('div');
         itemDiv.className = "p-3.5 text-xs hover:bg-slate-50 cursor-pointer font-medium text-slate-800";
@@ -319,7 +353,7 @@
         menu.appendChild(itemDiv);
       });
 
-      // 초기 상태: 직접 선택할 수 있도록 지정
+      // 초기 상태 세팅
       document.getElementById('cardGuest').textContent = "고객을 선택해 주세요 (클릭)";
       document.getElementById('cardFlight').textContent = "선택";
       document.getElementById('cardDetails').classList.add('hidden');
