@@ -288,13 +288,14 @@
       // 3. Kakao SDK 공유 실행 (GitHub Pages 도메인이므로 오류 없이 구동)
       if (typeof Kakao !== 'undefined' && Kakao.isInitialized()) {
         Kakao.Share.sendDefault({
-          objectType: 'text',
+          objectType: 'feed',
           text: finalMsg,
-          link: {
-            mobileWebUrl: 'https://developers.kakao.com',
-            webUrl: 'https://developers.kakao.com',
-          },
-          buttonTitle: ''
+          buttons: []
+          // link: {
+          //   mobileWebUrl: 'https://developers.kakao.com',
+          //   webUrl: 'https://developers.kakao.com',
+          // },
+          // buttonTitle: ''
         });
       } else {
         alert("카카오 SDK 초기화에 실패했습니다. 키 설정을 확인해 주세요.");
