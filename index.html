@@ -365,9 +365,11 @@
       updatePreview();
     }
 
+    let isStatusSelected = false;
     /* 상태 선택 시 미리보기만 업데이트 */
     function selectStatus(statusText) {
       currentStatusText = statusText;
+      isStatusSelected = true;
       updatePreview();
     }
 
@@ -441,6 +443,11 @@
     function sendKakaoReport() {
       if (!currentSelected) {
         alert("고객을 먼저 선택해 주세요.");
+        return;
+      }
+
+      if (!isStatusSelected) {
+        alert("진행 상태를 먼저 선택해 주세요.");
         return;
       }
 
